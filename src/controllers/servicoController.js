@@ -43,6 +43,22 @@ const servicoController = {
         res.status(500).send('Erro ao atualizar o serviço: ' + error.message);
       }
 
+    },
+
+    deletarServico: async (req,res) => {
+        const id = req.params.id;
+
+        try {
+            const servico = await Servico.findByPk(id);
+            if(!servico) {
+                return res.status(400).json({message: 'Serviço não encontrado!'})
+            }
+            await servico.destroy();
+            return res.status(200).json({ message: 'Serviço deletado com sucesso!' });
+             
+        } catch (error) {
+            res.status(500).send('Erro ao deletar o serviço: ' + error.message);
+        }
     }
 
 
