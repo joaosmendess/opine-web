@@ -20,4 +20,4 @@ const Cliente = db.define('cliente', {
     
 });
 
-module.exports = Cliente;
+module.exports = Cliente; 
