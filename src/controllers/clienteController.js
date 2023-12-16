@@ -1,3 +1,4 @@
+
 const Cliente = require('../models/cliente');
 
 const clienteController = {
@@ -43,6 +44,26 @@ atualizarClientes: async (req, res) => {
     } catch {
         res.status(500).send('Erro ao atualizar o cliente: ' + error.message);
     }
+},
+
+deletarClientes : async (req, res) => {
+   const id = req.params.id;
+   
+
+    try{
+        const cliente = await Cliente.findByPk(id);
+        if(!cliente) {
+            return res.status(400).json({message: 'Cliente não encontrado!'})
+        }
+        await cliente.destroy();
+        return res.status(200).json({ message: 'Cliente deletado com sucesso!' });
+        }
+      
+
+    catch{
+        res.status(500).send('Erro ao deletar o cliente: ' + error.message);
+    }
+
 }
 
 
