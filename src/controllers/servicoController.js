@@ -14,7 +14,16 @@ const servicoController = {
     },
 
    
+    adicionarServico : async (req,res) => {
 
+        try {
+            const novoServico = await Servico.create(req.body);
+            res.status(201).json(novoServico);
+    
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
 
 
 };
