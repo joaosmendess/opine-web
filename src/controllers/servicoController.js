@@ -15,9 +15,10 @@ const servicoController = {
 
    
     adicionarServico : async (req,res) => {
+        const { tipo_servico_id, ...rest } = req.body;
 
         try {
-            const novoServico = await Servico.create(req.body);
+            const novoServico = await Servico.create({tipo_servico_id, ...rest});
             res.status(201).json(novoServico);
     
         } catch (error) {
@@ -27,12 +28,12 @@ const servicoController = {
 
     atualizarServico : async (req, res) => {
         const id = req.params.id;
-        const {tipo_servico} = req.body;
+        const { tipo_servico_id, ...rest } = req.body;
 
       try {
         const servico = await Servico.findByPk(id);
         if (servico) {
-            servico.tipo_servico = tipo_servico;
+            Object.assign(servico, { tipo_servico_id, ...rest });
 
             await servico.save();
             res.send("Serviço atualizado com sucesso");
