@@ -1,13 +1,13 @@
-import Image from 'next/image'
+"use client";
+import Form from "@/components/Form";
+import Input from "@/components/Input";
+
 
 
 export default function Home() {
   return (
     <main >
-      <div>
-       <h1>HELLO WORLD!!!</h1>
-        
-      </div>
+     <Form/>
     </main>
   )
 }
