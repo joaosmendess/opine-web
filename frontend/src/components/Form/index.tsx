@@ -1,50 +1,98 @@
-"use client";
-
-import React from "react";
+import React, { ChangeEvent, useState, FormEvent } from "react";
 import Input from "../Input";
 import Button from "../Button";
 import { Container } from "./style";
 
+import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
+interface FormProps {}
 
+const Form: React.FC<FormProps> = () => {
+  const [formData, setFormData] = useState({
+    nome: '',
+    numero: "",
+    veiculo: "",
+  
+  });
+  
 
-interface formProps {};
+  const router = useRouter(); 
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-const Form: React.FC <formProps> = () => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
+    try {
+      const response = await axios.post("http://localhost:8080/api/clientes", formData);
 
-    return (
-<Container>
-<Input
-        id="nome"
-    
-        placeholder="Digite seu nome"
+      if (!response.data) {
+        throw new Error("Failed to submit the data. Please try again.");
+      }
+
+      console.log("Dados enviados com sucesso:", response.data);
+      router.push('/avaliacao'); 
+
+      // Limpar o formulário ou realizar outras ações após o envio bem-sucedido
+      setFormData({
+        nome: "",
+        numero: "",
+        veiculo: "",
      
-      />
-      <Input
-        id="carro"
+      });
+    } catch (error) {
+      console.error("Erro ao enviar os dados:", error);
+    }
+  };
+
+  return (
+    <Container>
+      <form onSubmit={handleSubmit}>
+        <Input
+        name="nome"
+          required
+          id="nome"
+          type="text"
+          placeholder="Digite seu nome"
+          onChange={ handleChange}
+  value={formData.nome}
+         
+        />
+
+<Input
+        name="numero"
+          required
+          id="numero"
+          type="text"
+          placeholder="Digite seu numero"
+          onChange={ handleChange}
+  value={formData.numero}
+         
+        />
+
+<Input
+        name="veiculo"
+          required
+          id="veiculo"
+          type="text"
+          placeholder="Digite seu veiculo"
+          onChange={ handleChange}
+  value={formData.veiculo}
+         
+        />
+
       
-        placeholder="Digite o modelo do seu carro"
-        
-      />
-      <Input
-        id="numero"
-       
-        placeholder="Digite seu número de contato"
-        
-      />
-      <Input
-        id="feedback"
-      
-        placeholder="Digite seu feedback sobre o serviço"
-    
-      />
+        <Button title="ENVIAR" type="submit"  onClick={() => router.push('/avaliacao')}/>    
+      </form>
+    </Container>
+  );
+};
 
-    <Button title="ENVIAR"/>
-</Container>
-
-);
-}
-
-export default Form
+export default Form;

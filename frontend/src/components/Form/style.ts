@@ -1,7 +1,7 @@
 "use client";
 import styled from "styled-components";
 
-export const Container = styled.form `
+export const Container = styled.div `
  
   
   display: flex;
