@@ -12,8 +12,7 @@
   "main": "index.js",
   "engines": {
     "node": "18.x"
-},
-  
+  },
   "devDependencies": {
     "nodemon": "^3.0.2"
   },
