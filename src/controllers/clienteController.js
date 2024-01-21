@@ -41,7 +41,7 @@ atualizarClientes: async (req, res) => {
             res.status(404).send('Cliente não encontrado.');
         }
 
-    } catch {
+    } catch (error) {
         res.status(500).send('Erro ao atualizar o cliente: ' + error.message);
     }
 },
