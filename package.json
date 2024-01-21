@@ -11,7 +11,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "engines": {
-    "node": "19.x"
+    "node": "18.x"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
