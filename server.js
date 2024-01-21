@@ -3,13 +3,13 @@ require("dotenv").config();
 
 const express = require('express');
 const app = express();
+app.use(express.json());
 
 
 const clienteRoutes = require('./src/routes/clienteRoutes');
 const servicoRoutes= require('./src/routes/servicoRoutes');
 const avaliacaoRoutes = require('./src/routes/avaliacaoRoutes');
 
-app.use(express.json());
 
 app.use('/api', clienteRoutes);
 app.use('/api', servicoRoutes);
