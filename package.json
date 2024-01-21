@@ -14,8 +14,8 @@
     "node": "14.x"
   },
   
-    "buildCommand": "next build"
-  ,
+    
+  
   "devDependencies": {
     "nodemon": "^3.0.2"
   },
