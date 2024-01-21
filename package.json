@@ -10,9 +10,9 @@
   "name": "meu-projeto-node",
   "version": "1.0.0",
   "main": "index.js",
-  "engines": { "node": "20.x" } ,
-  
-    
+  "engines": {
+    "node": "18.x"
+},
   
   "devDependencies": {
     "nodemon": "^3.0.2"
