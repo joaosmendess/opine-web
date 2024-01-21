@@ -11,9 +11,9 @@ app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
 
-const clienteRoutes = require('./src/routes/clienteRoutes');
-const servicoRoutes= require('./src/routes/servicoRoutes');
-const avaliacaoRoutes = require('./src/routes/avaliacaoRoutes');
+const clienteRoutes = require('./routes/clienteRoutes');
+const servicoRoutes= require('./routes/servicoRoutes');
+const avaliacaoRoutes = require('./routes/avaliacaoRoutes');
 
 
 app.use('/api', clienteRoutes);
