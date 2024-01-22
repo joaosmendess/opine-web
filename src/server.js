@@ -8,6 +8,9 @@ const isProduction = process.env.NODE_ENV === 'production';
 const connectionString = isProduction ? process.env.DATABASE_URL : process.env.LOCAL_DB_URL;
 
 const connection = mysql.createConnection(connectionString);
+console.log('Connected to PlanetScale!')
+connection.end()
+
 // Agora, inicialize o express
 const app = express();
 
