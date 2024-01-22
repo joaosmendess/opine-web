@@ -1,43 +1,41 @@
-require("dotenv").config(); // Coloque no início do arquivo
-
+// server.js
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2');
-const Sequelize = require('sequelize');
+const db = require('./db/connection'); // Caminho para o arquivo de configuração do Sequelize
+const mysql = require('mysql2')
 
-// Configure se o ambiente é de produção
-const isProduction = process.env.NODE_ENV === 'production';
+const connection = mysql.createConnection(process.env.DATABASE_URL)
+connection.end()
 
-// Conexão com o banco de dados usando Sequelize ou mysql2
-const db = new Sequelize(isProduction ? process.env.DATABASE_URL : process.env.LOCAL_DB_URL, {
-    dialectOptions: isProduction ? {
-        ssl: {
-            rejectUnauthorized: true
-        }
-    } : {}
-});
-
-// Inicialize o express
 const app = express();
 
-// Use os middlewares
-app.use(cors());
-app.use(express.json());
+app.use(cors());  // Habilita o CORS
+app.use(express.json());  // Permite que o servidor entenda requisições JSON
 
-// Importe as rotas
+// Importação das rotas
 const clienteRoutes = require('./routes/clienteRoutes');
 const servicoRoutes = require('./routes/servicoRoutes');
 const avaliacaoRoutes = require('./routes/avaliacaoRoutes');
 
-// Use as rotas
+// Uso das rotas
 app.use('/api', clienteRoutes);
 app.use('/api', servicoRoutes);
 app.use('/api', avaliacaoRoutes);
 
-// Defina a porta e inicie o servidor
+// Define a porta que o servidor irá ouvir
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-});
+
+// Sincroniza os modelos do Sequelize com o banco de dados e inicia o servidor
+db.sync()
+  .then(() => {
+    console.log('Conexão com o banco de dados foi estabelecida com sucesso.');
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando na porta ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Não foi possível sincronizar os modelos do banco de dados:', err);
+  });
 
 module.exports = db;

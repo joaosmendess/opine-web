@@ -1,12 +1,22 @@
+// database.js
+require('dotenv').config();
 const Sequelize = require('sequelize');
 
-//carregando variaveis de ambiente
-require('dotenv').config();
+const sequelize = new Sequelize(
+    process.env.NODE_ENV === 'production' ? process.env.DATABASE_URL : process.env.LOCAL_DB_URL, {
+        dialect: 'mysql',
+        logging: false,
+        dialectOptions: process.env.NODE_ENV === 'production' ? {
+            ssl: {
+                require: true,
+                rejectUnauthorized: true
+            }
+        } : {}
+    }
+);
 
-const db = new Sequelize(process.env.DATABASE, process.env.USER, process.env.PASSWORD, {
-    host: process.env.HOST,
-    dialect: 'mysql',
-    port: process.env.DB_PORT
-});
+sequelize.authenticate()
+    .then(() => console.log('Conexão com o banco de dados estabelecida com sucesso.'))
+    .catch(err => console.error('Não foi possível conectar ao banco de dados:', err));
 
-module.exports = db;
+module.exports = sequelize;
