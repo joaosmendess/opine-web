@@ -2,7 +2,12 @@
 const express = require('express');
 require("dotenv").config();
 const cors = require('cors');
+const mysql = require('mysql2')
 
+const isProduction = process.env.NODE_ENV === 'production';
+const connectionString = isProduction ? process.env.DATABASE_URL : process.env.LOCAL_DB_URL;
+
+const connection = mysql.createConnection(connectionString);
 // Agora, inicialize o express
 const app = express();
 
