@@ -15,8 +15,18 @@ const Cliente = db.define('cliente', {
         type: Sequelize.STRING
     },
     data_serv: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        // allowNull: true, // não é necessário, já que por padrão é true
     }
+}, {
+    // Opção para especificar explicitamente o nome da tabela
+    tableName: 'cliente',
+    
+    timestamps: true, 
+    
+    freezeTableName: true,
+
+    
     
 });
 

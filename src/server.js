@@ -1,7 +1,8 @@
 require('dotenv').config(); // Carrega as variáveis de ambiente a partir do arquivo .env
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2');
+const Sequelize = require('sequelize'); 
+
 
 const app = express();
 
@@ -13,36 +14,45 @@ const clienteRoutes = require('./routes/clienteRoutes');
 const servicoRoutes = require('./routes/servicoRoutes');
 const avaliacaoRoutes = require('./routes/avaliacaoRoutes');
 
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'mysql',
+  dialectOptions: {
+    ssl: {
+      require: true, 
+      rejectUnauthorized: true
+    }
+  }
+});
+
 // Uso das rotas
 app.use('/api', clienteRoutes);
 app.use('/api', servicoRoutes);
 app.use('/api', avaliacaoRoutes);
 
 // Cria a conexão com o banco de dados usando a variável de ambiente DATABASE_URL
-const connection = mysql.createConnection(process.env.DATABASE_URL);
 
 
 
 
-connection.connect((err) => {
-  if (err) {
-    console.error('Erro ao conectar ao banco de dados:', err);
-  } else {
-    console.log('Conexão com o banco de dados estabelecida com sucesso.');
 
-    connection.query('SHOW TABLES;', function (error, results, fields) {
-      if (error) throw error;
-      console.log('Tabelas:', results);
-    });
-    
+sequelize.authenticate()
+  .then(() => {
+    console.log('Conexão com o banco de dados foi estabelecida com sucesso.');
+  })
+  .catch(err => {
+    console.error('Não foi possível conectar ao banco de dados:', err);
+  });
+  sequelize.sync({ force: false }).then(() => {
+    console.log("Tabelas sincronizadas");
+  });
     
     // Inicie o servidor após a conexão bem-sucedida
     const PORT = process.env.PORT || 10000;
     app.listen(PORT, () => {
       console.log(`Servidor rodando na porta ${PORT}`);
     });
-  }
-});
+  
 
 
-module.exports = connection; // Exporte a conexão se desejar usá-la em outros lugares
+
+// Rota raiz

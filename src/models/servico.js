@@ -5,29 +5,19 @@ const db = require('../db/connection');
 const TipoServico = require('./TipoServico')
 
 const Servico = db.define('servico', {
-    id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
-    },
-
     tipo_servico_id: {
         type: Sequelize.INTEGER,
-        references: {
-            model: TipoServico,
-            key: 'id'
-        } 
-     },
-
+        allowNull: false,
+    },
     id_cliente: {
         type: Sequelize.SMALLINT,
-        allowNull: false
+        allowNull: false,
     },
-
-
-
-
+    // createdAt e updatedAt são adicionados automaticamente, se timestamps estiverem ativos
+}, {
+    tableName: 'servico',
+    timestamps: true, // Defina como false se essas colunas não existirem na sua tabela
+    freezeTableName: true,
 });
 
-
-module.exports = Servico
+module.exports = Servico;
