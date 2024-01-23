@@ -1,12 +1,7 @@
-// server.js
-require('dotenv').config();
+require('dotenv').config(); // Carrega as variáveis de ambiente a partir do arquivo .env
 const express = require('express');
 const cors = require('cors');
-const db = require('./db/connection'); // Caminho para o arquivo de configuração do Sequelize
-const mysql = require('mysql2')
-
-const connection = mysql.createConnection(process.env.DATABASE_URL)
-connection.end()
+const mysql = require('mysql2');
 
 const app = express();
 
@@ -23,19 +18,31 @@ app.use('/api', clienteRoutes);
 app.use('/api', servicoRoutes);
 app.use('/api', avaliacaoRoutes);
 
-// Define a porta que o servidor irá ouvir
-const PORT = process.env.PORT || 8080;
+// Cria a conexão com o banco de dados usando a variável de ambiente DATABASE_URL
+const connection = mysql.createConnection(process.env.DATABASE_URL);
 
-// Sincroniza os modelos do Sequelize com o banco de dados e inicia o servidor
-db.sync()
-  .then(() => {
-    console.log('Conexão com o banco de dados foi estabelecida com sucesso.');
+
+
+
+connection.connect((err) => {
+  if (err) {
+    console.error('Erro ao conectar ao banco de dados:', err);
+  } else {
+    console.log('Conexão com o banco de dados estabelecida com sucesso.');
+
+    connection.query('SHOW TABLES;', function (error, results, fields) {
+      if (error) throw error;
+      console.log('Tabelas:', results);
+    });
+    
+    
+    // Inicie o servidor após a conexão bem-sucedida
+    const PORT = process.env.PORT || 8080;
     app.listen(PORT, () => {
       console.log(`Servidor rodando na porta ${PORT}`);
     });
-  })
-  .catch((err) => {
-    console.error('Não foi possível sincronizar os modelos do banco de dados:', err);
-  });
+  }
+});
 
-module.exports = db;
+
+module.exports = connection; // Exporte a conexão se desejar usá-la em outros lugares
