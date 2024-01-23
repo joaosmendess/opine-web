@@ -3,3 +3,5 @@ node_modules/
 
 # Arquivos de configuração de ambiente
 .env
+
+frontend/
