@@ -4,8 +4,8 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'mysql',
   dialectOptions: {
     ssl: {
-      
-      rejectUnauthorized: false,
+      require: true,
+      rejectUnauthorized: true,
     }
   },
   logging: false, // Desative o log de SQL no console
